@@ -1,0 +1,32 @@
+- name: Create backend directory
+  file:
+    path: /opt/backend
+    state: directory
+
+- name: Copy backend app files
+  copy:
+    src: files/
+    dest: /opt/backend/
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: Build backend Docker image
+  community.docker.docker_image:
+    name: backend:latest
+    build:
+      path: /opt/backend
+    source: build
+
+- name: Run Flask backend container
+  community.docker.docker_container:
+    name: backend
+    image: backend:latest
+    state: started
+    restart_policy: always
+    env:
+      DB_HOST: 45.89.196.143
+      DB_USER: myuser
+      DB_PASSWORD: mypass
+    published_ports:
+      - "5000:5000"

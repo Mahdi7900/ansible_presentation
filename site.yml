@@ -1,0 +1,24 @@
+---
+- name: Install Docker on database,backend servers
+  hosts: database,backend
+  become: yes
+  roles:
+    - docker
+
+- name: Deploy Database
+  hosts: database
+  become: yes
+  roles:
+    - database
+
+- name: Deploy Backend
+  hosts: backend
+  become: yes
+  roles:
+    - backend
+
+- name: Deploy Frontend
+  hosts: frontend
+  become: yes
+  roles:
+    - frontend
